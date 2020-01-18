@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
-import {connect} from 'react-redux'
-import {Redirect} from 'react-router-dom'
-import {loginUser} from '../actions'
+import {withRouter} from 'react-router-dom'
+import {compose} from 'recompose'
 import  { ForgetPassword } from './Forgotpassword'
+import * as ROUTES from './Routes'
+import { withFirebase } from '../firebase'
 
 export class Login extends Component {
 
     state = {
         email: '',
-        password: ''
+        password: '',
+        errors: null
     } 
 
         onChange = (e) => {
@@ -20,23 +22,32 @@ export class Login extends Component {
 
         loginForm =(e) => {
             e.preventDefault()
-            const {dispatch} =  this.props
             const {email, password} = this.state
-            dispatch(loginUser(email, password))
+            this.props.firebase
+                .loginUserWithEmailAndPassword(email, password)
+                    .then(() => {
+                        this.setState({
+                            email: '',
+                            password: ''
+                        })
+                        this.props.history.push(ROUTES.Todo)
+                        })
+                        .catch(err => {
+                            this.setState({
+                                error: err
+                            })
+                    })
         }
 
 
     render() {
-        const { loginError, isAuthenticated} = this.props
-        if (isAuthenticated){
-            return <Redirect to ="/todos"/>
-        } else {
+       const {error} = this.state
         return (
             <React.Fragment>
                     <div className="card card-form">
                         <div className="card-body">
                             <form onSubmit={this.loginForm} action="">
-                                {loginError && (<span className ="errors">
+                                {error && (<span className ="errors">
                                     Incorrect email or password
                                 </span>)}
                                 <div className="form-group">
@@ -58,14 +69,8 @@ export class Login extends Component {
         )
         }
     }
-}
 
-function mapStateToProps(state) {
-    return {
-        isLogginIn: state.auth.isLoggingIn, 
-        loginError: state.auth.loginError,
-        isAuthenticated: state.auth.isAuthenticated
-    }
-}
 
-export default connect(mapStateToProps) (Login)
+
+
+export default compose(withRouter, withFirebase) (Login)

@@ -1,25 +1,27 @@
 import React, { Component } from 'react'
-import {connect} from 'react-redux'
-import {createUser} from '../actions'
-import {Route, Redirect} from 'react-router-dom'
-import * as Routes from './Routes'
+import {withFirebase} from '../firebase'
+import {Link, withRouter} from 'react-router-dom'
+import * as ROUTES from './Routes'
+import {compose} from 'recompose'
 
-export class Signup extends Component {
-    state = {
+
+export class Signup  extends Component {
+    constructor (props) {
+        super(props)
+
+   this.state = {
         email: '',
         password: '',
         password2: '',
         errors: {
             email: '',
             password: '',
-            password2: ''
+            password2: '',
+            signUp: ''
         },
-        redirect: false
+        firebaseError: ''
     }
-    
-    redirectTo = () => {
-        return  <Redirect to={Routes.Todo} />
-    }
+}
 
     onChange = (e) => {
         
@@ -46,38 +48,45 @@ export class Signup extends Component {
     registerForm =(e ) => {
         e.preventDefault()
         if (validateErrors(this.state.errors)){
-            const {dispatch, signupError } = this.props
-            const {email, password, password2} = this.state
-            if (signupError){
-                this.setState({
-                    email,
-                    password,
-                    password2
-                })
+            const {email, password} = this.state
+    
+            this.props.firebase
+                .createUserWithEmailAndPassword(email, password)
+                    .then(authUser => {
+                        return (
+                            this.props.firebase
+                                .user(authUser.user.uid)
+                                .set({
+                                    email
+                                })
+                        )})
+                        .then(() => {
+                        this.setState({
+                            email: '',
+                            password: ''
+                        })
+                        this.props.history.push(ROUTES.login)
+                    } )
+                    .catch (err => {
+                        this.setState({
+                            firebaseError : err
+                        })
+                    })
+           
         } else {
-            dispatch(createUser(email, password))
-            this.setState({
-                email: '',
-                password: '',
-                password2: ''
-            })
-        }
-        } else{
             console.log('invalid')
-        } 
-       
+        }
     }
+    
 
     render() {
-        const errors = this.state.errors
-        const { signupError} = this.props
-        
+        const {errors, firebaseError} = this.state
             return (
                 <React.Fragment>
                 <div className="card card-form">
                     <div className="card-body">
                         <form action="" onSubmit={this.registerForm}>
-                         {signupError && <span className ="errors">That email has been registered</span>}
+                         {firebaseError && <span>That email is already registered</span>}
                             <div className="form-group mx-4">
                                  <label htmlFor="email">Email</label>
                                  <input type="email"  name="email" value ={this.state.email}  onChange={this.onChange} className="form-control"/>
@@ -115,11 +124,7 @@ export class Signup extends Component {
     return valid
   }
 
-  function mapStateToProps(state) {
-      return {
-          isSigningUp: state.auth.isSigningUp,
-          signupError: state.auth.signupError
-      }
-  }
 
-export default connect(mapStateToProps) (Signup)
+
+export default compose(withFirebase, withRouter) (Signup)
+
