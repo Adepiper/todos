@@ -56,9 +56,9 @@ componentWillUnmount = () => {
         }>
         </Route>
           <Route path={ROUTES.login} Component = {Login}>
-            <div className="container my-4">
+            <React.Fragment>
                 <Login/>
-            </div>
+            </React.Fragment>
         </Route>
           
         
@@ -69,14 +69,18 @@ componentWillUnmount = () => {
         </Route>
 
         <Route path={ROUTES.register} Component = {Signup}>
-              <div className="container my-4">
-            <Signup/>
-            </div>
+             <React.Fragment>
+             <Signup/>
+             </React.Fragment>
+                
+                
+            
         </Route>
         <Route path={ROUTES.fgPassword} Component = {Forgotpassword}>
-            <div className="container my-4">
+            <React.Fragment>
           <Forgotpassword/>
-            </div>
+          </React.Fragment>
+            
         </Route>
         <Route path = {ROUTES.resetPassword} Component = {ResetPassword}>
               <div className="container my-4">

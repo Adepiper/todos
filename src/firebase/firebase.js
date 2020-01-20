@@ -1,5 +1,5 @@
 import myFirebase from './firebaseConfig'
-import React, {Component} from 'react'
+import {Component} from 'react'
   
 export class Firebase extends Component {
     

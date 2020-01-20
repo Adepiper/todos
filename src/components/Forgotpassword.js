@@ -35,24 +35,28 @@ export class Forgotpassword extends Component {
 
     render() {
         
-        const {errors} = this.state
+        const {errors, email} = this.state
+        const invalid = email === ''
         return (
-            
-            <div className="card card-form">
-               
+            <div className="login">
+            <div className="overlay">
+            <div className="container">
+            <div className="card card-form mx-3">
             <div className="card-body">
-            
                 <form onSubmit={this.fgPassword}>
-                {errors && <span className="errors">Email not registered</span>}
+                {errors && <h5 className="errors text-center">Email not registered</h5>}
                     <div className="form-group">
                         <label htmlFor="email">Email:</label>
                         <input type="email"  className="form-control" onChange={this.onChange} value={this.state.email} name="email"/>
                     </div>
                     <div className="formgroup">
-                        <button className="btn btn-primary float-right">Confirm your Email</button>
+                        <button disabled={invalid} className="btn btn-primary float-right">Confirm your Email</button>
                     </div>
                 </form>
             </div>
+        </div>
+        </div>
+        </div>
         </div>
         )
     }
@@ -61,11 +65,10 @@ export class Forgotpassword extends Component {
 const ForgetPassword = () => {
     return (
         <div>
-            <Link to = {Routes.fgPassword} >Forgot Password</Link>
+            <Link id="link" to = {Routes.fgPassword} >Forgot Password?</Link>
         </div>
     )
 }
-
 export default withFirebase( Forgotpassword)
 export {ForgetPassword}
 

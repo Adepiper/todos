@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {withRouter} from 'react-router-dom'
+import {withRouter, Link} from 'react-router-dom'
 import {compose} from 'recompose'
 import  { ForgetPassword } from './Forgotpassword'
 import * as ROUTES from './Routes'
@@ -40,16 +40,22 @@ export class Login extends Component {
         }
 
 
+
     render() {
-       const {error} = this.state
+       const {error, email, password} = this.state
+
+       const invalid = email === '' || password === ''
         return (
-            <React.Fragment>
-                    <div className="card card-form">
+
+            <div className="login">
+            <div className="overlay">
+            <div className="container">
+                    <div className="card card-form mx-3">
                         <div className="card-body">
                             <form onSubmit={this.loginForm} action="">
-                                {error && (<span className ="errors">
+                                {error && (<h5 className ="errors text-center">
                                     Incorrect email or password
-                                </span>)}
+                                </h5>)}
                                 <div className="form-group">
                                     <label htmlFor="email">Email:</label>
                                     <input type="email"  className="form-control" onChange={this.onChange} value={this.state.email} name="email"/>
@@ -58,14 +64,24 @@ export class Login extends Component {
                                     <label htmlFor="Password">Password:</label>
                                     <input type="password" className="form-control" onChange={this.onChange} value={this.state.password} name="password"/>
                                 </div>
-                                <div className="formgroup">
-                                    <button className="btn btn-primary float-right">Login</button>
+                                <div className="form-group float-center my-4">
+                                    <button disabled={invalid} className="btn form-control btn-primary">Login</button>
                                 </div>
-                                <ForgetPassword/>
+                                    <div className='form-group d-flex'>
+                                       <div id="link" className=" mr-auto">
+                                       <ForgetPassword/>
+                                            
+                                            </div>
+                                        <div className="">
+                                            <Link id="link" to="/register">Don't have an account?</Link>
+                                            </div>
+                                    </div>
                             </form>
                         </div>
                     </div>
-            </React.Fragment>
+                    </div>
+                    </div>
+                    </div>
         )
         }
     }

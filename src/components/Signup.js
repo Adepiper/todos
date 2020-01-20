@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {withFirebase} from '../firebase'
-import {withRouter} from 'react-router-dom'
+import {withRouter, Link} from 'react-router-dom'
 import * as ROUTES from './Routes'
 import {compose} from 'recompose'
 
@@ -79,35 +79,49 @@ export class Signup  extends Component {
     
 
     render() {
-        const {errors, firebaseError} = this.state
+        const {errors, firebaseError, email, password, password2} = this.state
+        const invalid = email ==='' || password === '' || password2 === '' 
             return (
-                <React.Fragment>
-                <div className="card card-form">
+                <div className="register">
+                <div className="overlay">
+                  <div className="container">
+                <div className="card card-form mx-3">
                     <div className="card-body">
                         <form action="" onSubmit={this.registerForm}>
-                         {firebaseError && <span>That email is already registered</span>}
-                            <div className="form-group mx-4">
+                         {firebaseError && <h5 className='errors mx-4 text-center'>That email is already registered</h5>}
+                            <div className="form-group font-weight-bold">
+                            { errors.email.length > 0 && <span className="float-right mt-1 errors">{errors.email}</span>}
                                  <label htmlFor="email">Email</label>
                                  <input type="email"  name="email" value ={this.state.email}  onChange={this.onChange} className="form-control"/>
-                                 { errors.email.length > 0 && <span className="float-right mt-1 errors">{errors.email}</span>}
+                                 
                             </div>
-                            <div className="form-group mx-4">
+                            <div className="form-group  font-weight-bold">
+                            { errors.password.length> 0 && <span className="float-right mt-1 errors">{errors.password}</span>}
                                  <label htmlFor="Password">Password</label>
                                  <input type="password" name="password" value ={this.state.password} onChange={this.onChange} className="form-control"/>
-                                 { errors.password.length> 0 && <span className="float-right mt-1 errors">{errors.password}</span>}
+                                 
                             </div>
-                            <div className="form-group mx-4">
-                                 <label htmlFor="confirm password">confrim password</label>
+                            <div className="form-group font-weight-bold">
+                            { errors.password2.length> 0 && <span className="float-right mt-1 errors">{errors.password2}</span>}
+                                 <label htmlFor="confirm password" >Confirm password</label>
                                  <input type="password" name="password2" value={this.state.password2} onChange={this.onChange} className="form-control"/>
-                                 { errors.password2.length> 0 && <span className="float-right mt-1 errors">{errors.password2}</span>}
+                                 
                             </div>
-                            <div className="form-group m-4 float-right ">
-                                     <button className="btn btn-primary float-right">Login</button>
+                            <div className="form-group my-4 font-weight-bold">
+                                <button disabled = {invalid} className="btn btn-primary form-control">Sign Up</button>
                             </div>
+
+                            <div className='form-group '>
+                                        <div className=" d-flex justify-content-center">
+                                            <Link id="link" to="/Login">Already signed up? Login</Link>
+                                            </div>
+                                    </div>
                         </form>
                     </div>
                 </div>
-                </React.Fragment>
+                </div>
+                </div>
+              </div>
             )
         } 
 }
