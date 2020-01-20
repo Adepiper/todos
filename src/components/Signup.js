@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import {withFirebase} from '../firebase'
-import {Link, withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import * as ROUTES from './Routes'
 import {compose} from 'recompose'
-
 
 export class Signup  extends Component {
     constructor (props) {
@@ -49,17 +48,16 @@ export class Signup  extends Component {
         e.preventDefault()
         if (validateErrors(this.state.errors)){
             const {email, password} = this.state
-    
             this.props.firebase
                 .createUserWithEmailAndPassword(email, password)
                     .then(authUser => {
-                        return (
                             this.props.firebase
-                                .user(authUser.user.uid)
-                                .set({
-                                    email
+                            .users()
+                                .add({
+                                    email 
                                 })
-                        )})
+                                })
+                        
                         .then(() => {
                         this.setState({
                             email: '',
@@ -68,6 +66,7 @@ export class Signup  extends Component {
                         this.props.history.push(ROUTES.login)
                     } )
                     .catch (err => {
+                        console.log(err)
                         this.setState({
                             firebaseError : err
                         })

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import Todos from './Todos'
-import AddTodo from './AddTodo'
-import { withAuthorization } from './session'
+import { withAuthorization,AuthUserContext } from './session'
+import {compose} from 'recompose'
+import { withFirebase } from '../firebase'
 
 export class TodoContainer extends Component {
     state = {
@@ -20,10 +21,19 @@ export class TodoContainer extends Component {
             id: 3,
             title: 'Read further maths',
             completed: false
-          }
+          },
+          
     
         ]
       }
+    onChange = (e) => {
+        this.setState({
+            [e.target.name] : e.target.value
+        })
+    }
+    onSubmit = (e) => {
+        
+    }
       
       isCompleted = (id) => {
         this.setState({
@@ -35,7 +45,6 @@ export class TodoContainer extends Component {
         })
       }
 
-      
    deleteTodo = (id) => {
     this.setState({
       todos: [...this.state.todos.filter((todo) => 
@@ -44,27 +53,44 @@ export class TodoContainer extends Component {
     })
   }
    
-  addTodo = (title) => {
-    const newTodo = {
-      id: 4,
-      title,
-      completed: false
-    }
-    this.setState({
-      todos : [...this.state.todos, newTodo]
-    })
+
+  addTodo = (event, authUser) => {
+    event.preventDefault()
+
+    const { firebase} = this.props
+    const {title} = this.state
+    firebase.addTodo()
+            .add({
+              title
+            
+            })
+        this.setState({
+          title: ''
+        })
+
   }
 
     render() {
+      
         return (
+          <AuthUserContext.Consumer>
+          { authUser =>(
             <div className="todos container my-4">
           <Todos deleteTodo = {this.deleteTodo} isCompleted ={this.isCompleted} todos = {this.state.todos} />
-          <AddTodo  addTodo = {this.addTodo}/>
+          <form onSubmit = {event => this.addTodo(event, authUser)} className="form-group my-3" action="">
+                <div className="d-flex">
+                <input className="form-control mr-4" type="text" name="title" id="" placeholder=" Add todo" value={this.state.title} onChange ={this.onChange}/>
+               <span> <button   className="btn my-2 btn-primary float-right" type="submit">Add</button></span>
+                </div>
+            </form>
           </div>
+          )
+          }
+          </AuthUserContext.Consumer>
         )
     }
 }
 
 const condition = authUser => !!authUser
 
-export default withAuthorization (condition)(TodoContainer)
+export default compose(withAuthorization(condition),withFirebase)(TodoContainer)

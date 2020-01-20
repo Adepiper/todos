@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withFirebase } from '../firebase'
 
+
 export class Admin extends Component {
 
     constructor (props){
@@ -10,33 +11,27 @@ export class Admin extends Component {
         loading: false,
         users: []
     }
-
 }
 
-    componentDidMount() {
-        this.setState({
-            loading: true
-        })
-      this.props.firebase
-            .users()
-            .on('value', snapshot => {
-            const userObject = snapshot.val()
-
-            const usersList = Object.keys(userObject).map(key => ({
-                ...userObject[key],
-                    uid: key
-            }))
+    componentDidMount =() => {
+        const users = []
+        
             this.setState({
-                users: usersList,
-                loading: false
+                loading: true
             })
-        })
+               this.props.firebase.users().forEach( snapshot => {
+                const {email} = snapshot.data()
+                    users.push({
+                        key: snapshot.id,
+                        email
+                    })
+                this.setState({
+                    users: users,
+                    loading: false
+                })
+            })
     }
-
-        componentWillUnmount() {
-            const {firebase} = this.props
-           firebase.users().off()
-        }
+    
 
     render() {
         const {loading, users} = this.state
@@ -49,6 +44,7 @@ export class Admin extends Component {
         )
     }
 }
+
 
 const UserList = ({users}) => {
    return(
