@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {withFirebase} from '../firebase'
 import {withRouter, Link} from 'react-router-dom'
 import * as ROUTES from './Routes'
+import * as ROLES from './roles'
 import {compose} from 'recompose'
 
 export class Signup  extends Component {
@@ -18,8 +19,10 @@ export class Signup  extends Component {
             password2: '',
             signUp: ''
         },
-        firebaseError: ''
+        firebaseError: '',
+        isAdmin: false
     }
+    
 }
 
     onChange = (e) => {
@@ -43,18 +46,28 @@ export class Signup  extends Component {
          errors, [name] : value
       })
     }
-    
+    checkedBox = (e) => {
+        this.setState({
+            [e.target.name] : e.target.checked 
+        })
+    }
+
     registerForm =(e ) => {
         e.preventDefault()
         if (validateErrors(this.state.errors)){
-            const {email, password} = this.state
+            const {email, password, isAdmin} = this.state
+            const roles = {}
+            if (isAdmin) {
+                roles[ROLES.ADMIN] = ROLES.ADMIN
+            }
             this.props.firebase
                 .createUserWithEmailAndPassword(email, password)
                     .then(authUser => {
                             this.props.firebase
-                            .users()
-                                .add({
-                                    email 
+                            .user(authUser.user.uid)
+                                .set({
+                                    email,
+                                    roles
                                 })
                                 })
                         
@@ -79,7 +92,7 @@ export class Signup  extends Component {
     
 
     render() {
-        const {errors, firebaseError, email, password, password2} = this.state
+        const {errors, firebaseError, email, password, password2, isAdmin} = this.state
         const invalid = email ==='' || password === '' || password2 === '' 
             return (
                 <div className="register">
@@ -108,6 +121,15 @@ export class Signup  extends Component {
                                  
                             </div>
                             <div className="form-group my-4 font-weight-bold">
+                                <label htmlFor="">
+                                    Admin 
+                                    <input 
+                                        name="isAdmin"
+                                        type='checkbox'
+                                        checked={isAdmin}
+                                        onChange={this.checkedBox}
+                                    />
+                                </label>
                                 <button disabled = {invalid} className="btn btn-primary form-control">Sign Up</button>
                             </div>
 

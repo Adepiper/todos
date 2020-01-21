@@ -23,7 +23,9 @@ export class Login extends Component {
         loginForm =(e) => {
             e.preventDefault()
             const {email, password} = this.state
-            this.props.firebase
+            const {firebase} = this.props
+            console.log(firebase)
+            firebase
                 .loginUserWithEmailAndPassword(email, password)
                     .then(() => {
                         this.setState({

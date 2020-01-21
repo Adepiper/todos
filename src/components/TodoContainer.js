@@ -56,10 +56,11 @@ export class TodoContainer extends Component {
 
   addTodo = (event, authUser) => {
     event.preventDefault()
-
+      
     const { firebase} = this.props
     const {title} = this.state
-    firebase.addTodo()
+    console.log(firebase)
+    /*firebase.addTodo()
             .add({
               title
             
@@ -67,6 +68,7 @@ export class TodoContainer extends Component {
         this.setState({
           title: ''
         })
+        */
 
   }
 

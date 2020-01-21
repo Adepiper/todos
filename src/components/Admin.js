@@ -1,36 +1,46 @@
 import React, { Component } from 'react'
 import { withFirebase } from '../firebase'
+import {compose} from 'recompose'
+import * as ROLES from './roles'
+import { withAuthorization } from './session'
 
 
 export class Admin extends Component {
 
-    constructor (props){
-    super(props)
     
-    this.state = {
+    state = {
         loading: false,
         users: []
     }
-}
+
+    
 
     componentDidMount =() => {
-        const users = []
+
+        const {firebase} = this.props
         
             this.setState({
                 loading: true
             })
-               this.props.firebase.users().forEach( snapshot => {
-                const {email} = snapshot.data()
-                    users.push({
-                        key: snapshot.id,
-                        email
-                    })
+               firebase.users().on('value', snapshot => {
+                const userObject = snapshot.val()
+
+                const userList = Object.keys(userObject).map(key => ({
+                    ...userObject[key],
+                    uid: key
+                }))
                 this.setState({
-                    users: users,
+                    users: userList,
                     loading: false
                 })
             })
+            
     }
+    
+    componentWillUnmount () {
+        this.props.firebase.users().off()
+    }
+    
     
 
     render() {
@@ -61,7 +71,10 @@ const UserList = ({users}) => {
            ))}
        </ul>
    )
-   
 }
 
-export default withFirebase(Admin)
+const condition = authUser => {
+    return authUser && !!authUser.roles[ROLES.ADMIN]
+}
+ 
+export default compose(withAuthorization(condition) ,withFirebase)(Admin)

@@ -11,7 +11,9 @@ import ResetPassword from './components/ResetPassword';
 import TodoContainer from './components/TodoContainer';
 import Home from './components/Home';
 import { AuthUserContext } from './components/session';
-import { Admin } from './components/Admin';
+import  Admin  from './components/Admin';
+
+
 
 
 class App extends Component {
@@ -21,9 +23,10 @@ class App extends Component {
   }
 
 componentDidMount = () => {
-   this.listener= this.props.firebase
-          .auth
-            .onAuthStateChanged(authUser => {
+
+    const {firebase} = this.props
+            this.listener= firebase
+            .onAuthListener(authUser => {
 
               if (authUser) {
                 this.setState({
@@ -72,9 +75,7 @@ componentWillUnmount = () => {
              <React.Fragment>
              <Signup/>
              </React.Fragment>
-                
-                
-            
+
         </Route>
         <Route path={ROUTES.fgPassword} Component = {Forgotpassword}>
             <React.Fragment>
@@ -87,8 +88,11 @@ componentWillUnmount = () => {
                 <ResetPassword/>
               </div>
         </Route>
+
         <Route path ={ROUTES.Admin} Component = {Admin}>
+          <React.Fragment>
             <Admin/>
+            </React.Fragment>
         </Route>
         </div>
         </AuthUserContext.Provider>

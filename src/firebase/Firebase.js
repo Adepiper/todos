@@ -6,7 +6,7 @@ export class Firebase extends Component {
      
 
       auth = myFirebase.auth()
-      db = myFirebase.firestore()
+      db = myFirebase.database()
     
 
     createUserWithEmailAndPassword = (email, password) => {
@@ -30,15 +30,34 @@ export class Firebase extends Component {
 
     user = (uid) => {
       
-     return  this.db.collection('users').doc(uid)
+     return  this.db.ref(`users/${uid}`)
     }
 
     users = () => {
-     return this.db.collection('users')
+     return this.db.ref('users')
     }
+    onAuthListener = (next, fallback) => {
+      this.auth.onAuthStateChanged(authUser => {
+        if (authUser) {
+          this.user(authUser.uid)
+              .once('value')
+                .then(snapshot => {
+                  const dbUser = snapshot.val()
 
-    addTodo = () => {
-      return this.db.collection('Todos')
+                  if (!dbUser.roles) {
+                    dbUser.roles = {}
+                }
+                authUser = {
+                    uid: authUser.uid,
+                    email: authUser.email,
+                    ...dbUser
+                }
+                next (authUser)
+                })
+        } else {
+          fallback()
+        }
+      })
     }
 }
 
