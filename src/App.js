@@ -16,10 +16,13 @@ import  Admin  from './components/Admin';
 
 
 
+
+
+
 class App extends Component {
 
   state = {
-    authUser: null
+    authUser: JSON.parse(localStorage.getItem('authUser'))
   }
 
 componentDidMount = () => {
@@ -27,17 +30,18 @@ componentDidMount = () => {
     const {firebase} = this.props
             this.listener= firebase
             .onAuthListener(authUser => {
-
-              if (authUser) {
+              localStorage.setItem('authUser', JSON.stringify(authUser))
                 this.setState({
                   authUser
                 })
-              } else {
+              }, 
+             () => {
+               localStorage.removeItem('authUser')
                 this.setState({
                   authUser: null
                 })
               }
-            })
+            )
 } 
 
 componentWillUnmount = () => {
