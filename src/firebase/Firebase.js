@@ -50,6 +50,8 @@ export class Firebase extends Component {
                 authUser = {
                     uid: authUser.uid,
                     email: authUser.email,
+                    emailVerified: authUser.emailVerified,
+                    providerData: authUser.providerData,
                     ...dbUser
                 }
                 next (authUser)
@@ -57,6 +59,12 @@ export class Firebase extends Component {
         } else {
           fallback()
         }
+      })
+    }
+
+    doEmailVerification = () => {
+      this.auth.currentUser.sendEmailVerification({
+        url: 'http://pipestodos.netlify.com/todos'
       })
     }
 }

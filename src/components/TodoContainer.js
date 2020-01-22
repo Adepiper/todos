@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Todos from './Todos'
-import { withAuthorization,AuthUserContext } from './session'
+import { withAuthorization,AuthUserContext, EmailVerifcation } from './session'
 import {compose} from 'recompose'
 import { withFirebase } from '../firebase'
 
@@ -95,4 +95,4 @@ export class TodoContainer extends Component {
 
 const condition = authUser => !!authUser
 
-export default compose(withAuthorization(condition),withFirebase)(TodoContainer)
+export default compose(withAuthorization(condition),withFirebase, EmailVerifcation)(TodoContainer)

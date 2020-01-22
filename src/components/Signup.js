@@ -63,14 +63,17 @@ export class Signup  extends Component {
             this.props.firebase
                 .createUserWithEmailAndPassword(email, password)
                     .then(authUser => {
-                            this.props.firebase
+                           return this.props.firebase
                             .user(authUser.user.uid)
                                 .set({
                                     email,
                                     roles
                                 })
                                 })
-                        
+                        .then(() => {
+                          return  this.props.firebase
+                                    .doEmailVerification()
+                        })
                         .then(() => {
                         this.setState({
                             email: '',
