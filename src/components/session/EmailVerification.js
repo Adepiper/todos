@@ -22,8 +22,8 @@ const EmailVerification = Component => {
                         <div className="Home">
                         <div className="overlay">
                         <div className="container">
-                            <div className="jumbotron">
-                                <div className="d-flex flex-column justify-content-center">
+                            <div className="jumbotron text-center mx-4">
+    
                         
                                <h5 className="my-2">
                                 Email confirmation sent 
@@ -31,16 +31,14 @@ const EmailVerification = Component => {
                             <h5 className="my-2">
                                 Verify your E-mail: Check your Email
                             </h5>
-                           
-                            
-                            <button className="btn btn-primary my-3" type="button" onClick={this.onSendEmailVerification}>
+                            <button className="btn" type="button" onClick={this.onSendEmailVerification}>
                                 Re-send confirmation E-mail
                             </button>
                             </div>
                         </div>
                         </div>
                             </div>
-                            </div>
+    
                     )
                        : (<Component {...this.props} />)
                     }

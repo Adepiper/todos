@@ -14,7 +14,7 @@ export class Home extends Component {
                 <div className="overlay">
                 <div className="container">
                     <div className="jumbotron text-center">
-                        <button className="btn btn-primary" onClick={this.click} >Get started </button>
+                        <button className="btn" onClick={this.click} >Get started </button>
                     </div>
                 </div>
             </div>
