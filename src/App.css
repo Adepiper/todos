@@ -23,9 +23,12 @@
 .jumbotron {
   background: transparent;
   margin-top: 30vh;
+  color:  white ;
+  margin-left: 15%;
+  font-size: 30px;
 }
  .jumbotron button {
-    width: 250px;
+    width: 300px;
     --x: 50%;
 	--y: 50%;
 	position: relative;
@@ -82,22 +85,12 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 @media (min-width: 968px){
   .container{
     width: 40% !important;
   }
 }
-
+  
 @media (max-width: 768px){
   .Home {
     background-image: url('https://images.pexels.com/photos/3299/postit-scrabble-to-do.jpg?auto=compress&cs=tinysrgb&dpr=1&w=1600');
@@ -105,7 +98,9 @@
     background-repeat: no-repeat;
   }
   
-  
+  .jumbotron {
+    margin-top: 40vh;
+  }
   
 }
 

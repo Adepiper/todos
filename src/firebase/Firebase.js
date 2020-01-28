@@ -64,7 +64,7 @@ export class Firebase extends Component {
 
     doEmailVerification = () => {
       this.auth.currentUser.sendEmailVerification({
-        url: 'http://pipestodos.netlify.com/todos'
+        url: 'http://localhost:3000/todos'
       })
     }
 }

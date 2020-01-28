@@ -12,10 +12,6 @@ const EmailVerification = Component => {
         onSendEmailVerification = () => {
             const {firebase} = this.props
             firebase.doEmailVerification()
-                    
-               // .then(() => this.setState({
-                 //   isSent: true
-                //}))
         }
         render() {
            
@@ -23,21 +19,28 @@ const EmailVerification = Component => {
                 <AuthUserContext.Consumer>
                     {authUser => 
                     needsEmailVerifcation(authUser) ? (
-                        <div>
-                            if (this.state.isSent) {
-                                <p>
-                                    Email confirmation sent 
-                                </p>
-                            }  else {
-                            <p>
-                                Verify your E-mail: Check your Emails
-                            </p>
-                            }
-                            <button disabled= {this.state.isSent} type="button" onClick={this.onSendEmailVerification}>
-                                Send confirmation E-mail
-                            </button>
-                        </div>
+                        <div className="Home">
+                        <div className="overlay">
+                        <div className="container">
+                            <div className="jumbotron">
+                                <div className="d-flex flex-column justify-content-center">
+                        
+                               <h5 className="my-2">
+                                Email confirmation sent 
+                                </h5>
+                            <h5 className="my-2">
+                                Verify your E-mail: Check your Email
+                            </h5>
+                           
                             
+                            <button className="btn btn-primary my-3" type="button" onClick={this.onSendEmailVerification}>
+                                Re-send confirmation E-mail
+                            </button>
+                            </div>
+                        </div>
+                        </div>
+                            </div>
+                            </div>
                     )
                        : (<Component {...this.props} />)
                     }
