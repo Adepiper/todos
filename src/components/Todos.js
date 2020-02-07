@@ -8,8 +8,7 @@ export class Todos extends Component {
             if (this.props.todos){
                  return this.props.todos.map((todo) => (
                 <React.Fragment>
-                    <Todoitem deleteTodo = {this.props.deleteTodo} key = {todo.id} isCompleted = {this.props.isCompleted}  todo = {todo}/>
-                    
+                    <Todoitem key = {todo.uid} isCompleted = {this.props.isCompleted}  todo = {todo}/>
                </React.Fragment>
         ))
     } else {

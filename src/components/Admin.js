@@ -1,80 +1,32 @@
-import React, { Component } from 'react'
-import { withFirebase } from '../firebase'
+import React from 'react'
+import {Switch,  Route} from 'react-router-dom'
 import {compose} from 'recompose'
 import * as ROLES from './roles'
 import { withAuthorization, EmailVerifcation } from './session'
+import * as ROUTES from './Routes'
+import UserList from './UserList'
+import UserItem from './UserItem'
+
+const Admin = () => (
+        <div>
+            <h1>
+                Admin
+            </h1>
+            <p>
+                this is only accessible bt admins
+            </p>
+
+            <Switch>
+                <Route exact path= {ROUTES.ADMIN_DETAILS} component = {UserItem} />
+                <Route exact path= {ROUTES.Admin} component = {UserList} />
+            </Switch>
+        </div>
+    )
 
 
-export class Admin extends Component {
 
-    
-    state = {
-        loading: false,
-        users: []
-    }
-
-    
-
-    componentDidMount =() => {
-
-        const {firebase} = this.props
-        
-            this.setState({
-                loading: true
-            })
-               firebase.users().on('value', snapshot => {
-                const userObject = snapshot.val()
-
-                const userList = Object.keys(userObject).map(key => ({
-                    ...userObject[key],
-                    uid: key
-                }))
-                this.setState({
-                    users: userList,
-                    loading: false
-                })
-            })
-            
-    }
-    
-    componentWillUnmount () {
-        this.props.firebase.users().off()
-    }
-    
-    
-
-    render() {
-        const {loading, users} = this.state
-        return (
-            <div>
-            <h1>Admin</h1>
-                {loading && <div>loading</div>}
-                <UserList users= {users}/>
-            </div>
-        )
-    }
-}
-
-
-const UserList = ({users}) => {
-   return(
-       <ul>
-           {users.map(user => (
-               <li key = {user.uid}>
-                    <span>
-                        ID: {user.uid}
-                    </span>
-                    <span>
-                        Email: {user.email}
-                    </span>
-               </li>
-           ))}
-       </ul>
-   )
-}
-
-const condition = authUser => {
+    const condition = authUser => {
     return authUser && !!authUser.roles[ROLES.ADMIN]
 }
  
-export default compose(withAuthorization(condition) ,withFirebase, EmailVerifcation)(Admin)
+export default compose(withAuthorization(condition), EmailVerifcation)(Admin)

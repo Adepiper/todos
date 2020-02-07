@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import {withFirebase} from '../firebase'
+
 
 export class Todoitem extends Component {
  
@@ -16,16 +18,16 @@ export class Todoitem extends Component {
     
     render() {
         const {
-            id,title
-         }  = this.props.todo
+            todo, isCompleted
+         }  = this.props
         return (
-            <div className ="todoItem my-3" style={this.getStyle()}>
-                <input type="checkbox" onChange ={this.props.isCompleted.bind(this, id )} className="px-2 mx-2"/>
-                {title}
-                <button onClick={this.props.deleteTodo.bind(this, id)}  className="btn btn-danger float-right">Delete</button>
+            <div  className ="todoItem my-3" style={this.getStyle()}>
+                <input  type="checkbox"  className="px-2 mx-2"/>
+                {todo.title}
+                
             </div>
         )
     }
 }
 
-export default Todoitem
+export default withFirebase(Todoitem)

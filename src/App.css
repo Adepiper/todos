@@ -22,7 +22,7 @@
 }
 .jumbotron {
   background: transparent;
-  margin-top: 30vh;
+  margin-top: 20vh;
   color:  white ;
   font-size: 30px;
 }
@@ -71,17 +71,6 @@
 #link {
   color: white !important;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 @media (min-width: 968px){

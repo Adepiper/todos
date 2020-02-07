@@ -5,4 +5,5 @@ export const Todo = '/todos'
 export const fgPassword = '/forgot'
 export const resetPassword = '/reset'
 export const Admin = '/Admin'
-export const AdminUser = '/adminUser'
+export const ADMIN_DETAILS = '/Admin/users/:id'
+

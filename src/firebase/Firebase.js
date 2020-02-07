@@ -64,8 +64,20 @@ export class Firebase extends Component {
 
     doEmailVerification = () => {
       this.auth.currentUser.sendEmailVerification({
-        url: 'https://pipestodos.netlify.com/'
+        url: 'http://localhost:3000/'
       })
+    }
+
+    todo = (uid) => {
+      return (
+        this.db.ref(`todos/${uid}`)
+      )
+    }
+
+    todos = () => {
+      return (
+        this.db.ref(`todos`)
+      )
     }
 }
 
